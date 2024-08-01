@@ -1,0 +1,180 @@
+{% extends 'user/default_home_base.html' %}
+{% load static %}
+
+{% block content %}
+{% load i18n %}
+
+{% language 'hy' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'user/forms.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ձեր կայքի վերնագիր</title>
+</head>
+<style>
+    .errorlist {
+        color: red;
+    }
+    
+    .error {
+        color: red;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    /* Modal content */
+    .modal-content {
+        background-color: #30246c;
+        margin: 20% auto;
+        padding: 20px;
+        border: 1px solid #aaa;
+        border-radius: 5px;
+        width: 300px;
+        text-align: center;
+    }
+
+    /* Buttons */
+    #confirmLogout, #cancelLogout {
+        background-color: #ddd;
+        color: #30246c;
+        border: none;
+        padding: 10px 20px;
+        margin: 5px;
+        cursor: pointer;
+        border-radius: 3px;
+    }
+
+    #confirmLogout:hover, #cancelLogout:hover {
+        background-color: #ccc;
+    }
+</style>
+<body>
+    <center>
+        <h1>Կրթություն, որակավորում</h1>
+        <br/><br/>
+        {% if educationForm.errors %}
+            <div class="errorlist">
+                <strong>{{ _("Խնդրում ենք ուղղել սխալները։") }}</strong>
+            </div>
+            <br/><br/>
+        {% endif %}
+        {% if submitted %}
+            <p>Ձեր տվյալները հաջողությամբ գրանցվել են!</p>
+        {% else %}
+            <form action="" method="POST">
+                {% csrf_token %}
+                <table>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*ԲՈւՀ-ի/կազմակերպության անվանում</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ educationForm.university }}
+                            {% if educationForm.university.errors %}
+                                <ul class="errorlist">
+                                    {% for error in educationForm.university.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*ԲՈւՀ-ի/կազմակերպության վայր (քաղաք, երկիր)</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ educationForm.place }}
+                            {% if educationForm.place.errors %}
+                                <ul class="errorlist">
+                                    {% for error in educationForm.place.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Ֆակուլտետ</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ educationForm.faculty }}
+                            {% if educationForm.faculty.errors %}
+                                <ul class="errorlist">
+                                    {% for error in educationForm.faculty.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Ուսման տարիներ: սկիզբ</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ educationForm.educ_start_year }}
+                            {% if educationForm.educ_start_year.errors %}
+                                <ul class="errorlist">
+                                    {% for error in educationForm.educ_start_year.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Ուսման տարիներ։ ավարտ</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ educationForm.educ_end_year }}
+                            {% if educationForm.educ_end_year.errors %}
+                                <ul class="errorlist">
+                                    {% for error in educationForm.educ_end_year.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Կրթական/Գիտական ծրագիր</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ educationForm.degree }}
+                            {% if educationForm.degree.errors %}
+                                <ul class="errorlist">
+                                    {% for error in educationForm.degree.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                </table>
+                <br/><br/>
+                <button class="back-button" type="button" onclick="window.location.href = '/show_education_list/'">Վերադառնալ</button>
+                <button class="submit-button" type="submit">Ավելացնել</button>
+            </form>
+        {% endif %}
+    </center>
+</body>
+</html>
+{% endlanguage %}
+{% endblock %}

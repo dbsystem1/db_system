@@ -1,0 +1,120 @@
+{% extends 'moderator/default_home_base.html' %}
+{% load static %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'moderator/forms.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ձեր կայքի վերնագիր</title>
+</head>
+<style>
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    /* Modal content */
+    .modal-content {
+        background-color: #30246c;
+        margin: 20% auto;
+        padding: 20px;
+        border: 1px solid #aaa;
+        border-radius: 5px;
+        width: 300px;
+        text-align: center;
+    }
+
+    /* Buttons */
+    #confirmLogout, #cancelLogout {
+        background-color: #ddd;
+        color: #30246c;
+        border: none;
+        padding: 10px 20px;
+        margin: 5px;
+        cursor: pointer;
+        border-radius: 3px;
+    }
+
+    #confirmLogout:hover, #cancelLogout:hover {
+        background-color: #ccc;
+    }
+</style>
+<body>
+    <center>
+        <h1>Մրցանակներ</h1>
+        <br/><br/>
+        <table>
+            <tr>
+                <td class="fixed-column_label">
+                    <label>*Մրցանակի անվանում</label>
+                </td>
+                <td class="fixed-column_input">
+                    {{ prizeForm.name }}
+                </td>
+            </tr>
+            <tr>
+                <td class="fixed-column_label">
+                    <label>Բնագավառ</label>
+                </td>
+                <td class="fixed-column_input">
+                    {{ prizeForm.branch }}
+                </td>
+            </tr>
+            <tr>
+                <td class="fixed-column_label">
+                    <label>*Մրցանակի տեսակ(անհատական/խմբային)</label>
+                </td>
+                <td class="fixed-column_input">
+                    {{ prizeForm.type }}
+                </td>
+            </tr>
+            <tr>
+                <td class="fixed-column_label">
+                    <label>*Մրցանակ շնորհող պետություն կամ կազմակերպություն</label>
+                </td>
+                <td class="fixed-column_input">
+                    {{ prizeForm.giver }}
+                </td>
+            </tr>
+            <tr>
+                <td class="fixed-column_label">
+                    <label>Ինչի համար է շնորհվել (ձեւակերպում)</label>
+                </td>
+                <td class="fixed-column_input">
+                    {{ prizeForm.reason }}
+                </td>
+            </tr>
+            <tr>
+                <td class="fixed-column_label">
+                    <label>*Մրցանակի ստացման տարի</label>
+                </td>
+                <td class="fixed-column_input">
+                    {{ prizeForm.year }}
+                </td>
+            </tr>
+            <tr>
+                <td class="fixed-column_label">
+                    <label>*Ինտերնետային հղում</label>
+                </td>
+                <td class="fixed-column_input">
+                    {{ prizeForm.link }}
+                </td>
+            </tr>
+        </table>
+        <br/><br/>
+        <a href="{% url 'moderator-show_prize_list' id %}" class="back-button">Վերադառնալ</a>
+    </center>
+</body>
+</html>
+{% endblock %}

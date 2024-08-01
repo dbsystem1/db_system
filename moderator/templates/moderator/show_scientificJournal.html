@@ -1,0 +1,168 @@
+{% extends 'moderator/default_home_base.html' %}
+{% load static %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'moderator/forms.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ձեր կայքի վերնագիր</title>
+</head>
+<style>
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    /* Modal content */
+    .modal-content {
+        background-color: #30246c;
+        margin: 20% auto;
+        padding: 20px;
+        border: 1px solid #aaa;
+        border-radius: 5px;
+        width: 300px;
+        text-align: center;
+    }
+
+    /* Buttons */
+    #confirmLogout, #cancelLogout {
+        background-color: #ddd;
+        color: #30246c;
+        border: none;
+        padding: 10px 20px;
+        margin: 5px;
+        cursor: pointer;
+        border-radius: 3px;
+    }
+
+    #confirmLogout:hover, #cancelLogout:hover {
+        background-color: #ccc;
+    }
+</style>
+<body>
+    <center>
+        <h1>Հոդված գիտական ամսագրում</h1>
+        <br/><br/>
+        <table>
+            <tr>
+                <td class="fixed-column_label">
+                    <label>*Հրապարակման շտեմարան</label>
+                </td>
+                <td class="fixed-column_input">
+                    {{ scientificJournalForm.publication_repository }}
+                </td>
+            </tr>
+            <tr>
+                <td class="fixed-column_label">
+                    <label>*DOI</label>
+                </td>
+                <td class="fixed-column_input">
+                    {{ scientificJournalForm.DOI }}
+                </td>
+            </tr>
+            <tr>
+                <td class="fixed-column_label">
+                    <label>*ISSN (print)</label>
+                </td>
+                <td class="fixed-column_input">
+                    {{ scientificJournalForm.ISSN_print }}
+                </td>
+            </tr>
+            <tr>
+                <td class="fixed-column_label">
+                    <label>*ISSN (electronic)</label>
+                </td>
+                <td class="fixed-column_input">
+                    {{ scientificJournalForm.ISSN_electronic }}
+                </td>
+            </tr>
+            <tr>
+                <td class="fixed-column_label">
+                    <label>*Հոդվածի վերնագիր</label>
+                </td>
+                <td class="fixed-column_input">
+                    {{ scientificJournalForm.title }}
+                </td>
+            </tr>
+            <tr>
+                <td class="fixed-column_label">
+                    <label>*Ամսագրի անվանում</label>
+                </td>
+                <td class="fixed-column_input">
+                    {{ scientificJournalForm.magazine_name }}
+                </td>
+            </tr>
+            <tr>
+                <td class="fixed-column_label">
+                    <label>*Տարի</label>
+                </td>
+                <td class="fixed-column_input">
+                    {{ scientificJournalForm.year }}
+                </td>
+            </tr>
+            <tr>
+                <td class="fixed-column_label">
+                    <label>*Էջեր</label>
+                </td>
+                <td class="fixed-column_input">
+                    {{ scientificJournalForm.pages_count }}
+                </td>
+            </tr>
+            <tr>
+                <td class="fixed-column_label">
+                    <label>*Լեզու</label>
+                </td>
+                <td class="fixed-column_input">
+                    {{ scientificJournalForm.language }}
+                </td>
+            </tr>
+            <tr>
+                <td class="fixed-column_label">
+                    <label>*Հոդվածի ինտերնետային հղում</label>
+                </td>
+                <td class="fixed-column_input">
+                    {{ scientificJournalForm.link }}
+                </td>
+            </tr>
+            <tr>
+                <td class="fixed-column_label">
+                    <label>*Ֆինանսավորման աղբյուր</label>
+                </td>
+                <td class="fixed-column_input">
+                    {{ scientificJournalForm.funding_source }}
+                </td>
+            </tr>
+            <tr>
+                <td class="fixed-column_label">
+                    <label>*Ամսագրի հատոր</label>
+                </td>
+                <td class="fixed-column_input">
+                    {{ scientificJournalForm.volume }}
+                </td>
+            </tr>
+            <tr>
+                <td class="fixed-column_label">
+                    <label>*Quartile(квартиль)</label>
+                </td>
+                <td class="fixed-column_input">
+                    {{ scientificJournalForm.quartile }}
+                </td>
+            </tr>
+        </table>
+        <br/><br/>
+        <a href="{% url 'moderator-show_scientificJournal_list' id %}" class="back-button">Վերադառնալ</a>
+    </center>
+</body>
+</html>
+{% endblock %}

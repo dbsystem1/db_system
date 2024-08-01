@@ -1,0 +1,117 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'user/default_home_base.css' %}">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database System {{ user.username }}</title>
+    <style>
+        /* Modal container */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+    
+        /* Modal content */
+        .modal-content {
+            background-color: #30246c;
+            margin: 20% auto;
+            padding: 20px;
+            border: 1px solid #aaa;
+            border-radius: 5px;
+            width: 300px;
+            text-align: center;
+        }
+    
+        /* Buttons */
+        #confirmLogout, #cancelLogout {
+            background-color: #ddd;
+            color: #30246c;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+    
+        #confirmLogout:hover, #cancelLogout:hover {
+            background-color: #ccc;
+        }
+
+        .modal-content p {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <h6 style="color: white;">Բարի գալուստ, {{ user.username }}!</h6>
+
+    <a href="{% url 'user-default_home' %}" {% if request.path == '/default_home/' %}class="active"{% endif %}>Անհատական տվյալներ</a>
+    <a href="{% url 'user-edit_profile' %}" {% if request.path == '/edit_profile/' %}class="active"{% endif %}>Հաշվի կարգավորումներ</a>
+
+    <a id="logoutLink" href="{% url 'user-log_out' %}" {% if request.path == '/log_out/' %}class="active"{% endif %}>Դուրս գալ</a>
+
+    <!-- Example of the confirmation modal -->
+    <div id="confirmationModal" class="modal">
+    <div class="modal-content">
+        <p>Դուք համոզված ե՞ք, որ ուզում եք դուրս գալ համակարգից։</p>
+        <button id="confirmLogout">Այո</button>
+        <button id="cancelLogout">Ոչ</button>
+    </div>
+    </div>
+
+    <!-- Include JavaScript code -->
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Get references to elements
+        var logoutLink = document.getElementById('logoutLink');
+        var confirmationModal = document.getElementById('confirmationModal');
+        var confirmButton = document.getElementById('confirmLogout');
+        var cancelButton = document.getElementById('cancelLogout');
+        
+        // Event listener for clicking the logout link
+        logoutLink.addEventListener('click', function(event) {
+            // Prevent the default behavior (following the link)
+            event.preventDefault();
+            // Show the confirmation modal
+            confirmationModal.style.display = 'block';
+        });
+        
+        // Event listener for clicking the confirm button in the modal
+        confirmButton.addEventListener('click', function(event) {
+            // Proceed with the logout process
+            window.location.href = "{% url 'user-log_out' %}";
+        });
+        
+        // Event listener for clicking the cancel button in the modal
+        cancelButton.addEventListener('click', function(event) {
+            // Hide the confirmation modal
+            confirmationModal.style.display = 'none';
+        });
+    });
+    </script>
+</div>
+
+
+<div class="content">
+    {% block content %}
+    {% endblock %}
+</div>
+
+
+
+</body>
+</html>
+

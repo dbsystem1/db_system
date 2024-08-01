@@ -1,0 +1,455 @@
+{% extends 'user/default_home_base.html' %}
+{% load static %}
+
+{% block content %}
+{% load i18n %}
+
+{% language 'hy' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'user/forms.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ձեր կայքի վերնագիր</title>
+</head>
+
+<style>       
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    /* Modal content */
+    .modal-content {
+        background-color: #30246c;
+        margin: 20% auto;
+        padding: 20px;
+        border: 1px solid #aaa;
+        border-radius: 5px;
+        width: 300px;
+        text-align: center;
+    }
+
+    /* Buttons */
+    #confirmLogout, #cancelLogout {
+        background-color: #ddd;
+        color: #30246c;
+        border: none;
+        padding: 10px 20px;
+        margin: 5px;
+        cursor: pointer;
+        border-radius: 3px;
+    }
+
+    #confirmLogout:hover, #cancelLogout:hover {
+        background-color: #ccc;
+    }
+</style>
+
+<body>
+    <center>
+        <h1>Անհատական հարցաթերթիկ</h1>
+        <br>
+        {% if professor.profile_image %}
+            <label>Անձնական լուսանկար</label>
+            <br>
+            <img src="{{ professor.profile_image.url }}" class="resized-image" alt="Resized Image">
+        {% else %}
+            <p>Լուսանկար ներբեռնած չէ։</p>
+        {% endif %}
+        {% if professorForm.errors or academicDegreeForm.errors or addressForm.errors or departmantForm.errors or thesesForm.errors %}
+            <div class="errorlist">
+                <strong>{{ _("Խնդրում ենք ուղղել սխալները։") }}</strong>
+            </div>
+            <br/><br/>
+        {% endif %}
+        
+        {% if submitted %}
+            <p>Ձեր տվյալները հաջողությամբ թարմացվել են!</p>
+        {% else %}
+            <form action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <table>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Անուն</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ professorForm.first_name }}
+                            {% if professorForm.first_name.errors %}
+                                <ul class="errorlist">
+                                    {% for error in professorForm.first_name.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Ազգանուն</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ professorForm.last_name }}
+                            {% if professorForm.last_name.errors %}
+                                <ul class="errorlist">
+                                    {% for error in professorForm.last_name.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Հայրանուն</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ professorForm.patronomic }}
+                            {% if professorForm.patronomic.errors %}
+                                <ul class="errorlist">
+                                    {% for error in professorForm.patronomic.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Ծննդյան ամսաթիվ</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ professorForm.birth_date }}
+                            {% if professorForm.birth_date.errors %}
+                                <ul class="errorlist">
+                                    {% for error in professorForm.birth_date.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*ՀԾՀ (սոց. քարտ)</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ professorForm.social_card_number }}
+                            {% if professorForm.social_card_number.errors %}
+                                <ul class="errorlist">
+                                    {% for error in professorForm.social_card_number.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Սեռ</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ professorForm.gender }}
+                            {% if professorForm.gender.errors %}
+                                <ul class="errorlist">
+                                    {% for error in professorForm.gender.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*ՀՀ ԳԱԱ անդամություն</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ professorForm.membership_of_RA_NAS }}
+                            {% if professorForm.membership_of_RA_NAS.errors %}
+                                <ul class="errorlist">
+                                    {% for error in professorForm.membership_of_RA_NAS.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Բջջ. հեռախոսահամար</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ professorForm.phone }}
+                            {% if professorForm.phone.errors %}
+                                <ul class="errorlist">
+                                    {% for error in professorForm.phone.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Փոստ. հասցե</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ professorForm.postalNumber }}
+                            {% if professorForm.postalNumber.errors %}
+                                <ul class="errorlist">
+                                    {% for error in professorForm.postalNumber.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                        <td class="fixed-column_label">
+                            <label>*Պաշտոն</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ professorForm.position }}
+                            {% if professorForm.position.errors %}
+                                <ul class="errorlist">
+                                    {% for error in professorForm.position.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Մասնագիտական դասիչ/Բնագավառ հիմնական</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ professorForm.domain }}
+                            {% if professorForm.domain.errors %}
+                                <ul class="errorlist">
+                                    {% for error in professorForm.domain.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Դրույքաչափ</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ professorForm.work_time }}
+                            {% if professorForm.work_time.errors %}
+                                <ul class="errorlist">
+                                    {% for error in professorForm.work_time.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Գիտություն</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ academic_degreeForm.science }}
+                            {% if academic_degreeForm.science.errors %}
+                                <ul class="errorlist">
+                                    {% for error in academic_degreeForm.science.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Գիտական աստիճան</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ academic_degreeForm.degree }}
+                            {% if academic_degreeForm.degree.errors %}
+                                <ul class="errorlist">
+                                    {% for error in academic_degreeForm.degree.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Երկիր</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ addressForm.country }}
+                            {% if addressForm.country.errors %}
+                                <ul class="errorlist">
+                                    {% for error in addressForm.country.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                        <td class="fixed-column_label">
+                            <label>*Քաղաք</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ addressForm.city }}
+                            {% if addressForm.city.errors %}
+                                <ul class="errorlist">
+                                    {% for error in addressForm.city.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Փողոց</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ addressForm.street }}
+                            {% if addressForm.street.errors %}
+                                <ul class="errorlist">
+                                    {% for error in addressForm.street.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Գերատեսչության տեսակ(հիմնական)</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ departmantForm.general_work_type }}
+                            {% if departmantForm.general_work_type.errors %}
+                                <ul class="errorlist">
+                                    {% for error in departmantForm.general_work_type.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Գերատեսչության տեսակ(ներքին համատեղում)</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ departmantForm.internal_work_type }}
+                            {% if departmantForm.internal_work_type.errors %}
+                                <ul class="errorlist">
+                                    {% for error in departmantForm.internal_work_type.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Գերատեսչության տեսակ(արտաքին համատեղում)</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ departmantForm.external_work_type }}
+                            {% if departmantForm.external_work_type.errors %}
+                                <ul class="errorlist">
+                                    {% for error in departmantForm.external_work_type.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Գերատեսչության Էլ. փոստի հասցե</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ departmantForm.email }}
+                            {% if departmantForm.email.errors %}
+                                <ul class="errorlist">
+                                    {% for error in departmantForm.email.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*ԲՈւՀ-ի/կազմակերպության վայր (քաղաք, երկիր)</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ departmantForm.place }}
+                            {% if departmantForm.place.errors %}
+                                <ul class="errorlist">
+                                    {% for error in departmantForm.place.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Վերջին թեզի վերնագիր</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ thesesForm.title }}
+                            {% if thesesForm.title.errors %}
+                                <ul class="errorlist">
+                                    {% for error in thesesForm.title.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>Անձնական լուսանկար</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            <center>{{ professorForm.profile_image }}</center>
+                            {% if professorForm.profile_image.errors %}
+                                <ul class="errorlist">
+                                    {% for error in professorForm.profile_image.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    </table>
+                    <br/><br/>
+                    <button class="back-button" type="button" onclick="window.location.href = '/show_professor_list/'">Վերադառնալ</button>
+                    <button class="cancel-button" type="button" onclick="window.location.href = '/show_professor_list/'">Չեղարկել</button>
+                    <button class="submit-button" type="submit">Թարմացնել</button>
+            </form>
+        {% endif %}
+    </center>
+</body>
+</html>
+{% endlanguage %}
+{% endblock %}

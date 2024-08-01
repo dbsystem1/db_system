@@ -1,0 +1,297 @@
+{% extends 'moderator/default_home_base.html' %}
+{% load static %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'user/forms.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ձեր կայքի վերնագիր</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            
+            margin-top: 30px;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            margin-top: -50px;
+            display: flex;
+            flex-direction: row; /* Arrange children in a row */
+            width: 100%; 
+            padding: 30px;
+            box-sizing: border-box;
+        }
+        .results {
+            flex: 5; /* Take up remaining space */
+            padding-right: 200px; /* Add some spacing between filters and search results */
+            border-right: 1px solid #ccc; /* Add a border between filters and search results */
+        }
+        .filters {
+            flex: 0; /* Take up double the space of filters */
+            padding-left: 100px; /* Add some spacing between filters and search results */
+        }
+        h2 {
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            color: #666;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+        input[type="text"], select {
+            width: calc(100% - 24px);
+            padding: 12px;
+            margin-bottom: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        input[type="text"]:focus, select:focus {
+            outline: none;
+            border-color: #5c9edb;
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 25px;
+            background-color: #30246c;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #30246c;
+        }
+    
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        /* Modal content */
+        .modal-content {
+            background-color: #30246c;
+            margin: 20% auto;
+            padding: 20px;
+            border: 1px solid #aaa;
+            border-radius: 5px;
+            width: 300px;
+            text-align: center;
+        }
+
+        /* Buttons */
+        #confirmLogout, #cancelLogout {
+            background-color: #ddd;
+            color: #30246c;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        #confirmLogout:hover, #cancelLogout:hover {
+            background-color: #ccc;
+        }   
+
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="results">  
+            <h2>Օգտատերեր</h2>
+            <br/>
+            
+            
+        <table style="width: 100%; padding: 10px auto; height: 40px;">
+    
+       
+        {% if filtered_data %}
+            {% for item in filtered_data  %}
+            <tr>
+                <td style="font-size: 19px; ">
+                    <span> • </span> <a href="{% url 'moderator-default_home' item.user.id %}" style="color: black; text-decoration: underline;">  {{ item.professor.first_name }} {{ item.professor.last_name }}  </a>
+                </td>
+            </tr>
+            {% endfor %}
+        {% elif not filtered_data and flag %}
+            <p>Այստեղ կհայտնվեն ֆիլտրմանը համապատասխանող օգտատերերը։</p>
+
+        {% elif not filtered_data  %}
+            <p>Նման տվյալներով օգտատեր գոյություն չունի։</p>
+       
+      
+        {% endif %}
+
+            </table>
+        
+        </div>
+               
+
+        <div class="filters">
+            <h2>Ֆիլտրել ըստ․․․</h2>
+    
+            <form method="get">
+                
+                <div class="form-group">
+                    <label for="id_professor_first_name">Անուն:</label>
+                    <input type="text" id="id_professor_first_name" name="professor_first_name" placeholder="Անուն">
+
+                </div>
+
+                <div class="form-group">
+                    <label for="id_professor_last_name">Ազգանուն:</label>
+                    <input type="text" id="id_professor_last_name" name="professor_last_name" placeholder="Ազգանուն">
+                </div>
+
+                <div class="form-group">
+                    <label for="id_professor_patronomic">Հայրանուն:</label>
+                    <input type="text" id="id_professor_patronomic" name="professor_patronomic" placeholder="Ազգանուն">
+                </div>
+
+                <div class="form-group">
+                    <label for="id_professor_gender">Սեռ:</label>
+                    <select id="id_professor_gender" name="professor_gender">
+                        <option value="">-- Ընտրել --</option>
+                        <option value="Արական">Արական</option>
+                        <option value="Իգական">Իգական</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_professor_position">Պաշտոն:</label>
+                    <select id="id_professor_position" name="professor_position">
+                        <option value="">-- Ընտրել --</option>
+                        <option value="Չկա">Չկա</option>
+                        <option value="դոցենտ">դոցենտ</option>
+                        <option value="պրոֆեսոր">պրոֆեսոր</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_professor_membership_of_RA_NAS">ՀՀ ԳԱԱ անդամություն:</label>
+                    <select id="id_professor_membership_of_RA_NAS" name="professor_membership_of_RA_NAS">
+                        <option value="">-- Ընտրել --</option>
+                        <option value="Չկա">Չկա</option>
+                        <option value="ՀՀ ԳԱԱ թղթակից անդամ">ՀՀ ԳԱԱ թղթակից անդամ</option>
+                        <option value="ՀՀ ԳԱԱ իսկական անդամ">ՀՀ ԳԱԱ իսկական անդամ</option>
+                        <option value="ՀՀ ԳԱԱ արտասահմանյան անդամ">ՀՀ ԳԱԱ արտասահմանյան անդամ</option>
+                        <option value="ՀՀ գիտության վաստակավոր գործիչ">ՀՀ գիտության վաստակավոր գործիչ</option>
+                    </select>
+                </div>
+
+
+
+                <div class="form-group">
+                    <label for="id_professor_work_time">Դրույքաչափ:</label>
+                    <select id="id_professor_work_time" name="professor_work_time">
+                        <option value="">-- Ընտրել --</option>
+                        <option value="Ժամավճար">Ժամավճար</option>
+                        <option value="0.25">0.25</option>
+                        <option value="0.5">0.5</option>
+                        <option value="1">1</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_professor_domain">Մասնագիտական դասիչ/Բնագավառ հիմնական:</label>
+                    <select id="id_professor_domain" name="professor_domain">
+                        <option value="">-- Ընտրել --</option>
+                        <option value="Բնական գիտություններ">Բնական գիտություններ</option>
+                        <option value="Ճարտարագիտություն և տեխնոլոգիա">Ճարտարագիտություն և տեխնոլոգիա</option>
+                        <option value="Գյուղատնտեսական գիտություններ">Գյուղատնտեսական գիտություններ</option>
+                        <option value="Հասարակական գիտություններ">Հասարակական գիտություններ</option>
+                        <option value="Հայագիտություն և հումանիտար գիտություններ">Հայագիտություն և հումանիտար գիտություններ</option>
+                        <option value="Բժշկական գիտություններ">Բժշկական գիտություններ</option>
+                    </select>
+                </div>
+
+                
+
+                <div class="form-group">
+                    <label for="id_degree_science">Գիտություն:</label>
+                    <select id="id_degree_science" name="degree_science">
+                        <option value="">-- Ընտրել --</option>
+                        <option value="Չկա">Չկա</option>
+                        <option value="Ֆիզիկամաթեմատիկական">Ֆիզիկամաթեմատիկական</option>
+                        <option value="Քիմիական">Քիմիական</option>
+                        <option value="Կենսաբանական">Կենսաբանական</option>
+                        <option value="Երկրաբանական">Երկրաբանական</option>
+                        <option value="Տեխնիկական">Տեխնիկական</option>
+                        <option value="Գյուղատնտեսական">Գյուղատնտեսական</option>
+                        <option value="Պատմական">Պատմական</option>
+                        <option value="Տնտեսագիտության">Տնտեսագիտության</option>
+                        <option value="Փիլիսոփայական">Փիլիսոփայական</option>
+                        <option value="Բանասիրական">Բանասիրական</option>
+                        <option value="Աշխարհագրական">Աշխարհագրական</option>
+                        <option value="Իրավաբանական">Իրավաբանական</option>
+                        <option value="Մանկավարժական">Մանկավարժական</option>
+                        <option value="Բժշկական">Բժշկական</option>
+                        <option value="Անասնաբուժական">Անասնաբուժական</option>
+                        <option value="Արվեստագիտության">Արվեստագիտության</option>
+                        <option value="Ճարտարապետության">Ճարտարապետության</option>
+                        <option value="Հոգեբանական">Հոգեբանական</option>
+                        <option value="Սոցոլոգիական">Սոցոլոգիական</option>
+                        <option value="Քաղաքական">Քաղաքական</option>
+                        <option value="Դեղագործական">Դեղագործական</option>
+                        <option value="Մշակութաբանության">Մշակութաբանության</option>
+                        <option value="Ռազմական">Ռազմական</option>
+                       
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="id_degree_degree">Գիտական աստիճան:</label>
+                    <select id="id_degree_degree" name="degree_degree">
+                        <option value="">-- Ընտրել --</option>
+                        <option value="Չկա">Չկա</option>
+                        <option value="թեկնածու">թեկնածու</option>
+                        <option value="դոկտոր">դոկտոր</option>
+                    </select>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div>
+                        <label for="id_professor_smaller_age">Նշված տարիքից ցածր:</label>
+                        <input type="number" id="id_professor_smaller_age" name="professor_smaller_age" placeholder="Տարիք" >
+                    </div>
+                    <div>
+                        <label for="id_professor_bigger_age">Նշված տարիքից բարձր:</label>
+                        <input type="number" id="id_professor_bigger_age" name="professor_bigger_age" placeholder="Տարիք">
+                    </div>
+                </div>
+                            
+                <div class="form-group">
+                <input type="submit" value="Ֆիլտրել">
+                </div>
+            </form>
+        </div>      
+</div>  
+</body>
+</html>
+{% endblock %}

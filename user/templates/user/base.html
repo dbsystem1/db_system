@@ -1,0 +1,28 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'user/base.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database System</title>
+</head>
+<body>
+
+<div class="navbar">
+    <a href="{% url 'user-welcome' %}" {% if request.path == '/' %}class="active"{% endif %}>Բարի գալուստ</a>
+    <a href="{% url 'user-register' %}" {% if request.path == '/register/' %}class="active"{% endif %}>Գրանցվել համակարգում</a>
+    <a href="{% url 'user-log_in' %}" {% if request.path == '/log_in/' %}class="active"{% endif %}>Մուտք գործել համակարգ</a>
+
+
+</div>
+
+<div class="content">
+    {% block content %}
+    {% endblock %}
+</div>
+
+</body>
+</html>

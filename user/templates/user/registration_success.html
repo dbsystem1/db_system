@@ -1,0 +1,75 @@
+{% extends 'user/base.html' %}
+{% load static %}
+
+{% block content %}
+{% load i18n %}
+
+{% language 'hy' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Registration Successful</title>
+    <style>
+        .message-container {
+            text-align: center;
+            margin-top: 100px;
+        }
+
+        html, body {
+            background: rgb(223,223,233);
+            background: linear-gradient(90deg, rgba(223,223,233,1) 0%, rgba(223,223,233,1) 0%, rgba(223,223,233,1) 100%);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        /* Modal content */
+        .modal-content {
+            background-color: #30246c;
+            margin: 20% auto;
+            padding: 20px;
+            border: 1px solid #aaa;
+            border-radius: 5px;
+            width: 300px;
+            text-align: center;
+        }
+
+        /* Buttons */
+        #confirmLogout, #cancelLogout {
+            background-color: #ddd;
+            color: #30246c;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        #confirmLogout:hover, #cancelLogout:hover {
+            background-color: #ccc;
+        }
+       
+    </style>
+</head>
+<body>
+    <div class="message-container">
+        <h1>Ձեր տվյալները հաջողությամբ գրանցվել են!</h1>
+        <a href="{% url 'user-log_in' %}" style="font-size: 20px; text-decoration: underline;" {% if request.path == '/log_in/' %}class="active"{% endif %}>Ցանկանում ե՞ք մուտք գործել համակարգ</a>
+    </div>
+    
+ </body>
+</html>
+{% endlanguage %}
+{% endblock %}

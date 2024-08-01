@@ -1,0 +1,233 @@
+{% extends 'user/default_home_base.html' %}
+{% load static %}
+
+{% block content %}
+{% load i18n %}
+
+{% language 'hy' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'user/forms.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ձեր կայքի վերնագիր</title>
+</head>
+<style>       
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    /* Modal content */
+    .modal-content {
+        background-color: #30246c;
+        margin: 20% auto;
+        padding: 20px;
+        border: 1px solid #aaa;
+        border-radius: 5px;
+        width: 300px;
+        text-align: center;
+    }
+
+    /* Buttons */
+    #confirmLogout, #cancelLogout {
+        background-color: #ddd;
+        color: #30246c;
+        border: none;
+        padding: 10px 20px;
+        margin: 5px;
+        cursor: pointer;
+        border-radius: 3px;
+    }
+
+    #confirmLogout:hover, #cancelLogout:hover {
+        background-color: #ccc;
+    }
+</style>
+<body>
+    <center>
+        <h1>Դրամաշնորհի/թեմայի ղեկավարում/մասնակցություն</h1>
+        <br/><br/>
+        {% if grantForm.errors %}
+            <div class="errorlist">
+                <strong>{{ _("Խնդրում ենք ուղղել սխալները։") }}</strong>
+            </div>
+            <br/><br/>
+        {% endif %}
+        {% if submitted %}
+            <p>Ձեր տվյալները հաջողությամբ թարմացվել են!</p>
+        {% else %}
+            <form action="" method="POST">
+                {% csrf_token %}
+                <table>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>'Դրամաշնորհի տեսակը'</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ grantForm.type }}
+                            {% if grantForm.type.errors %}
+                                <ul class="errorlist">
+                                    {% for error in grantForm.type.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>Կարգավիճակը դրամաշնորհում</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ grantForm.status }}
+                            {% if grantForm.status.errors %}
+                                <ul class="errorlist">
+                                    {% for error in grantForm.status.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Դրամաշնորհի վերնագիր</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ grantForm.title }}
+                            {% if grantForm.title.errors %}
+                                <ul class="errorlist">
+                                    {% for error in grantForm.title.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Դրամաշնորհի ծածկագիր</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ grantForm.grant_code }}
+                            {% if grantForm.grant_code.errors %}
+                                <ul class="errorlist">
+                                    {% for error in grantForm.grant_code.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Դրամաշնորհ հատկացնող պետության կամ կազմակերպության անվանում</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ grantForm.grantor }}
+                            {% if grantForm.grantor.errors %}
+                                <ul class="errorlist">
+                                    {% for error in grantForm.grantor.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>Դրամաշնորհի իրականացման սկիզբ (տարի)</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ grantForm.start }}
+                            {% if grantForm.start.errors %}
+                                <ul class="errorlist">
+                                    {% for error in grantForm.start.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>Դրամաշնորհի տևողություն (ամիս)</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ grantForm.duration_months }}
+                            {% if grantForm.duration_months.errors %}
+                                <ul class="errorlist">
+                                    {% for error in grantForm.duration_months.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Դրամաշնորհի ֆինանսական ծավալ (գումար և տարադրամ)</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ grantForm.financial_volume }}
+                            {% if grantForm.financial_volume.errors %}
+                                <ul class="errorlist">
+                                    {% for error in grantForm.financial_volume.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>Հաշվետվության մատչելիություն (կայքի հասցե)</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ grantForm.link }}
+                            {% if grantForm.link.errors %}
+                                <ul class="errorlist">
+                                    {% for error in grantForm.link.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>Հրապարակումների քանակ (որտեղ նշված է դրամաշնորհի մասին)</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ grantForm.publication_num }}
+                            {% if grantForm.publication_num.errors %}
+                                <ul class="errorlist">
+                                    {% for error in grantForm.publication_num.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                </table>
+                <br/><br/>
+                <button class="back-button" type="button" onclick="window.location.href = '/show_grant_list/'">Վերադառնալ</button>
+                <button class="cancel-button" type="button" onclick="window.location.href = '/show_grant_list/'">Չեղարկել</button>
+                <button class="submit-button" type="submit">Թարմացնել</button>
+            </form>
+        {% endif %}
+    </center>
+</body>
+</html>
+{% endlanguage %}
+{% endblock %}

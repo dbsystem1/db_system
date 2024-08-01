@@ -1,0 +1,108 @@
+{% extends 'user/base.html' %}
+{% block content %}
+{% load i18n %}
+
+{% language 'hy' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Edit Profile</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        margin-top: 30px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 570px;
+        margin: auto;
+        margin-top: 60px;
+        padding: 50px;
+        padding-top: 30px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        margin-top: 40px;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+        width: calc(100% - 12px);
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    input[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        margin-top: 25px;
+        background-color: #30246c;
+        border: none;
+        border-radius: 4px;
+        color: #fff;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #30246c;
+    }
+
+    .error-message {
+        font-size: 14px;
+        color: red;
+        margin-bottom: 10px;
+    }
+
+    .requirements {
+        font-size: 14px;
+        color: #888;
+        margin-bottom: 10px;
+    }
+    .errorlist {
+        color: red;
+    }
+    
+    .error {
+        color: red;
+    }
+    
+    html, body {
+        background: rgb(223,223,233);
+        background: linear-gradient(90deg, rgba(223,223,233,1) 0%, rgba(223,223,233,1) 0%, rgba(223,223,233,1) 100%);
+    }
+</style>
+
+</head>
+<body>
+    <div class="container">
+    <h2>Ցանկանում եք մուտք գործել որպես`</h2>
+    <ul>
+        <li><a href="{% url 'user-default_home' %}" class="button-link"  style="color: #333; text-decoration: underline;">Օգտատեր</a></li>
+        <li><a href="{% url 'moderator-filter_professor' %}" class="button-link"  style="color: #333; text-decoration: underline;">Ադմինիստրատոր</a></li>
+    </ul>
+</div>
+</body>
+</html>
+{% endlanguage %}
+{% endblock %}

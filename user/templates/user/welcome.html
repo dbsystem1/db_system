@@ -1,0 +1,46 @@
+{% extends 'user/base.html' %}
+{% load static %}
+
+{% block content %}
+{% load i18n %}
+
+{% language 'hy' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Registration Successful</title>
+    <style>
+        .message-container {
+            text-align: center;
+            margin-top: 100px;
+        }
+
+        html, body {
+            background: rgb(223,223,233);
+            background: linear-gradient(90deg, rgba(223,223,233,1) 0%, rgba(223,223,233,1) 0%, rgba(223,223,233,1) 100%);
+        }
+
+        #myImage {
+            width: 100vw; /* Set width to 100% of viewport width */
+            height: auto; /* Maintain aspect ratio */
+            max-width: 20%; /* Ensure image does not exceed viewport width */
+        }
+
+    </style>
+</head>
+<body>
+    <div class="message-container">
+        <img id="myImage" src="{% static 'user/rau_logo.png' %}" alt="Logo">
+        <br/><br/><br/>
+        <h1 style="font-size: 20px; color: #30246c;">ՀՌՀ Գիտական աշխատանքների օնլայն շտեմարան։</h1>
+        <br/><br/>
+        <a href="{% url 'user-log_in' %}" style="font-size: 15px; text-decoration: underline;" {% if request.path == '/log_in/' %}class="active"{% endif %}>Ցանկանում ե՞ք մուտք գործել համակարգ</a>
+    </div>
+    
+ </body>
+</html>
+{% endlanguage %}
+{% endblock %}

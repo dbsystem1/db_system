@@ -1,0 +1,69 @@
+{% extends 'moderator/default_home_base.html' %}
+{% load static %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'user/forms.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ձեր կայքի վերնագիր</title>
+</head>
+<style>
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    /* Modal content */
+    .modal-content {
+        background-color: #30246c;
+        margin: 20% auto;
+        padding: 20px;
+        border: 1px solid #aaa;
+        border-radius: 5px;
+        width: 300px;
+        text-align: center;
+    }
+
+    /* Buttons */
+    #confirmLogout, #cancelLogout {
+        background-color: #ddd;
+        color: #30246c;
+        border: none;
+        padding: 10px 20px;
+        margin: 5px;
+        cursor: pointer;
+        border-radius: 3px;
+    }
+
+    #confirmLogout:hover, #cancelLogout:hover {
+        background-color: #ccc;
+    }
+</style>
+<body>
+    <center>
+        <h1>Մենագրություն, ձեռնարկ, ժողովածու</h1>
+        <br/><br/>
+        <table style="width: 30%; margin: 0 auto;">
+            {% for collection in collection_list %}
+                <tr>
+                    <td>
+                        <a href="{% url 'moderator-show_collection' collection.id %}"  class="button-link" style="text-decoration: underline;"> {{collection.title}} - {{ collection.year_of_publication }} </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </center>
+</body>
+</html>
+{% endblock %}

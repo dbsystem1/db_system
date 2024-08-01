@@ -1,0 +1,273 @@
+{% extends 'user/default_home_base.html' %}
+{% load static %}
+
+{% block content %}
+{% load i18n %}
+
+{% language 'hy' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'user/forms.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ձեր կայքի վերնագիր</title>
+</head>
+<style>       
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    /* Modal content */
+    .modal-content {
+        background-color: #30246c;
+        margin: 20% auto;
+        padding: 20px;
+        border: 1px solid #aaa;
+        border-radius: 5px;
+        width: 300px;
+        text-align: center;
+    }
+
+    /* Buttons */
+    #confirmLogout, #cancelLogout {
+        background-color: #ddd;
+        color: #30246c;
+        border: none;
+        padding: 10px 20px;
+        margin: 5px;
+        cursor: pointer;
+        border-radius: 3px;
+    }
+
+    #confirmLogout:hover, #cancelLogout:hover {
+        background-color: #ccc;
+    }
+</style>
+<body>
+    <center>
+        <h1>Մենագրություն, ձեռնարկ, ժողովածու</h1>
+        <br/><br/>
+        {% if collectionForm.errors %}
+            <div class="errorlist">
+                <strong>{{ _("Խնդրում ենք ուղղել սխալները։") }}</strong>
+            </div>
+            <br/><br/>
+        {% endif %}
+        {% if submitted %}
+            <p>Ձեր տվյալները հաջողությամբ թարմացվել են!</p>
+        {% else %}
+            <form action="" method="POST">
+                {% csrf_token %}
+                <table>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Հրապարակման տեսակ</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ collectionForm.post_type }}
+                            {% if collectionForm.post_type.errors %}
+                                <ul class="errorlist">
+                                    {% for error in collectionForm.post_type.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                        <td class="fixed-column_label">
+                            <label>*Մենագրության (գրքի) վերնագիր</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ collectionForm.title }}
+                            {% if collectionForm.title.errors %}
+                                <ul class="errorlist">
+                                    {% for error in collectionForm.title.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Գլխի կամ հոդվածի վերնագիր</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ collectionForm.chapter_title }}
+                            {% if collectionForm.chapter_title.errors %}
+                                <ul class="errorlist">
+                                    {% for error in collectionForm.chapter_title.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                        <td class="fixed-column_label">
+                            <label>*Հրատարակչության անվանում</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ collectionForm.publisher_name }}
+                            {% if collectionForm.publisher_name.errors %}
+                                <ul class="errorlist">
+                                    {% for error in collectionForm.publisher_name.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Հրատարակման երկիր</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ collectionForm.country_of_publication }}
+                            {% if collectionForm.country_of_publication.errors %}
+                                <ul class="errorlist">
+                                    {% for error in collectionForm.country_of_publication.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                        <td class="fixed-column_label">
+                            <label>*Հրատարակման տարի</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ collectionForm.year_of_publication }}
+                            {% if collectionForm.year_of_publication.errors %}
+                                <ul class="errorlist">
+                                    {% for error in collectionForm.year_of_publication.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Էջեր</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ collectionForm.pages }}
+                                {% if collectionForm.pages.errors %}
+                                    <ul class="errorlist">
+                                        {% for error in collectionForm.pages.errors %}
+                                            <li>{{ error }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Լեզու</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ collectionForm.language }}
+                            {% if collectionForm.language.errors %}
+                                <ul class="errorlist">
+                                    {% for error in collectionForm.language.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*ISBN</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ collectionForm.ISBN }}
+                            {% if collectionForm.ISBN.errors %}
+                                <ul class="errorlist">
+                                    {% for error in collectionForm.ISBN.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>DOI</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ collectionForm.DOI }}
+                            {% if collectionForm.DOI.errors %}
+                                <ul class="errorlist">
+                                    {% for error in collectionForm.DOI.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>Հրապարակման ինտերնետային հղում</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ collectionForm.link }}
+                            {% if collectionForm.link.errors %}
+                                <ul class="errorlist">
+                                    {% for error in collectionForm.link.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>Երաշխավորող</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ collectionForm.guarantor }}
+                            {% if collectionForm.guarantor.errors %}
+                                <ul class="errorlist">
+                                    {% for error in collectionForm.guarantor.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Ֆինանսավորման աղբյուր</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ collectionForm.funnding_source }}
+                            {% if collectionForm.funnding_source.errors %}
+                                <ul class="errorlist">
+                                    {% for error in collectionForm.funnding_source.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+            
+                </table>
+                <br/><br/>
+                <button class="back-button" type="button" onclick="window.location.href = '/show_collection_list/'">Վերադառնալ</button>
+                <button class="cancel-button" type="button" onclick="window.location.href = '/show_collection_list/'">Չեղարկել</button>
+                <button class="submit-button" type="submit">Թարմացնել</button>
+            </form>
+        {% endif %}
+    </center>
+</body>
+</html>
+{% endlanguage %}
+{% endblock %}

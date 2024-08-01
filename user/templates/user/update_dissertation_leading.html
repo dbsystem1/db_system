@@ -1,0 +1,188 @@
+{% extends 'user/default_home_base.html' %}
+{% load static %}
+
+{% block content %}
+{% load i18n %}
+
+{% language 'hy' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'user/forms.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ձեր կայքի վերնագիր</title>
+</head>
+<style>       
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    /* Modal content */
+    .modal-content {
+        background-color: #30246c;
+        margin: 20% auto;
+        padding: 20px;
+        border: 1px solid #aaa;
+        border-radius: 5px;
+        width: 300px;
+        text-align: center;
+    }
+
+    /* Buttons */
+    #confirmLogout, #cancelLogout {
+        background-color: #ddd;
+        color: #30246c;
+        border: none;
+        padding: 10px 20px;
+        margin: 5px;
+        cursor: pointer;
+        border-radius: 3px;
+    }
+
+    #confirmLogout:hover, #cancelLogout:hover {
+        background-color: #ccc;
+    }
+</style>
+<body>
+    <center>
+        <h1>Ատենախոսության ղեկավարում</h1>
+        <br/><br/>
+        {% if dissertationForm.errors %}
+            <div class="errorlist">
+                <strong>{{ _("Խնդրում ենք ուղղել սխալները։") }}</strong>
+            </div>
+            <br/><br/>
+        {% endif %}
+        {% if submitted %}
+            <p>Ձեր տվյալները հաջողությամբ թարմացվել են!</p>
+        {% else %}
+            <form action="" method="POST">
+                {% csrf_token %}
+                <table>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Ատենախոսության վերնագիր</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ dissertation_leadingForm.title }}
+                            {% if dissertation_leadingForm.title.errors %}
+                                <ul class="errorlist">
+                                    {% for error in dissertation_leadingForm.title.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Ատենախոսության մասնագիտական կոդ/դասիչ</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ dissertation_leadingForm.code }}
+                            {% if dissertation_leadingForm.code.errors %}
+                                <ul class="errorlist">
+                                    {% for error in dissertation_leadingForm.code.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>Ատենախոսության իրականացման կազմակերպություն</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ dissertation_leadingForm.organization }}
+                            {% if dissertation_leadingForm.organization.errors %}
+                                <ul class="errorlist">
+                                    {% for error in dissertation_leadingForm.organization.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Կայացած պաշտպանության տարի</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ dissertation_leadingForm.protection_year }}
+                            {% if dissertation_leadingForm.protection_year.errors %}
+                                <ul class="errorlist">
+                                    {% for error in dissertation_leadingForm.protection_year.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>ԲՈԿ-ի կողմից հաստատման ամսաթիվ (օր.ամիս.տարի)</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ dissertation_leadingForm.confirmation_date }}
+                            {% if dissertation_leadingForm.confirmation_date.errors %}
+                                <ul class="errorlist">
+                                    {% for error in dissertation_leadingForm.confirmation_date.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>Մասնագիտական խորհուրդի անվանում՝</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ dissertation_leadingForm.name }}
+                            {% if dissertation_leadingForm.name.errors %}
+                                <ul class="errorlist">
+                                    {% for error in dissertation_leadingForm.name.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fixed-column_label">
+                            <label>*Մասնագիտական խորհուրդի ծածկագիր</label>
+                        </td>
+                        <td class="fixed-column_input">
+                            {{ dissertation_leadingForm.password }}
+                            {% if dissertation_leadingForm.password.errors %}
+                                <ul class="errorlist">
+                                    {% for error in dissertation_leadingForm.password.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                </table>
+                <br/><br/>
+                <button class="back-button" type="button" onclick="window.location.href = '/show_dissertation_leading_list/'">Վերադառնալ</button>
+                <button class="cancel-button" type="button" onclick="window.location.href = '/show_dissertation_leading_list/'">Չեղարկել</button>
+                <button class="submit-button" type="submit">Թարմացնել</button>
+            </form>
+        {% endif %}
+    </center>
+</body>
+</html>
+{% endlanguage %}
+{% endblock %}

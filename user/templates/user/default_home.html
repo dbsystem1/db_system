@@ -1,0 +1,69 @@
+{% extends 'user/default_home_base.html' %}
+{% load static %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'user/default_home.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buttons</title>
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        /* Modal content */
+        .modal-content {
+            background-color: #30246c;
+            margin: 20% auto;
+            padding: 20px;
+            border: 1px solid #aaa;
+            border-radius: 5px;
+            width: 300px;
+            text-align: center;
+        }
+
+        /* Buttons */
+        #confirmLogout, #cancelLogout {
+            background-color: #ddd;
+            color: #30246c;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        #confirmLogout:hover, #cancelLogout:hover {
+            background-color: #ccc;
+        }
+       
+    </style>
+</head>
+<body>
+    <h1>Անհատական տվյալներ</h1>
+    <br/>
+    <div class="button-container">
+        <a class="button" href="{% url 'user-show_professor_list' %}">Անհատական հարցաթերթիկ</a>
+        <a class="button" href="{% url 'user-show_scientificJournal_list' %}">Հոդվածներ գիտական ամսագրում</a>
+        <a class="button" href="{% url 'user-show_collection_list' %}">Մենագրություններ, ձեռնարկներ, ժողովածուներ</a>
+        <a class="button" href="{% url 'user-show_conference_participation_list' %}">Գիտաժողովների մասնակցություն</a>
+        <a class="button" href="{% url 'user-show_patent_list' %}">Արտոնագրեր (պատենտներ)</a>
+        <a class="button" href="{% url 'user-show_dissertation_leading_list' %}">Ատենախոսության ղեկավարում</a>
+        <a class="button" href="{% url 'user-show_grant_list' %}">Դրամաշնորհների/թեմաների ղեկավարում/մասնակցություն</a>
+        <a class="button" href="{% url 'user-show_prize_list' %}">Մրցանակներ</a>
+        <a class="button" href="{% url 'user-show_education_list' %}">Կրթություններ, որակավորումներ</a>
+    </div>
+</body>
+</html>
+{% endblock %}

@@ -1,0 +1,166 @@
+{% extends 'user/default_home_base.html' %}
+{% block content %}
+{% load i18n %}
+
+{% language 'hy' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Edit Profile</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        margin-top: 30px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 570px;
+        margin: auto;
+        margin-top: 60px;
+        padding: 50px;
+        padding-top: 30px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        margin-top: 40px;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+        width: calc(100% - 12px);
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    input[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        margin-top: 25px;
+        background-color: #30246c;
+        border: none;
+        border-radius: 4px;
+        color: #fff;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #30246c;
+    }
+
+    .error-message {
+        font-size: 14px;
+        color: red;
+        margin-bottom: 10px;
+    }
+
+    .requirements {
+        font-size: 14px;
+        color: #888;
+        margin-bottom: 10px;
+    }
+    .errorlist {
+        color: red;
+    }
+    
+    .error {
+        color: red;
+    }
+    
+    html, body {
+        background: rgb(223,223,233);
+        background: linear-gradient(90deg, rgba(223,223,233,1) 0%, rgba(223,223,233,1) 0%, rgba(223,223,233,1) 100%);
+    }
+
+    .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        /* Modal content */
+        .modal-content {
+            background-color: #30246c;
+            margin: 20% auto;
+            padding: 20px;
+            border: 1px solid #aaa;
+            border-radius: 5px;
+            width: 300px;
+            text-align: center;
+        }
+
+        /* Buttons */
+        #confirmLogout, #cancelLogout {
+            background-color: #ddd;
+            color: #30246c;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        #confirmLogout:hover, #cancelLogout:hover {
+            background-color: #ccc;
+        }
+       
+</style>
+
+</head>
+<body>
+    <div class="container">
+    <h2>Հաշվի կարգավորումներ</h2>
+
+    {% if submitted %}
+        <p>Ձեր տվյալները հաջողությամբ թարմացվել են!</p>
+    {% else %}
+    <form method="post">
+        {% csrf_token %}
+        
+            <label for="id_username">Անուն համակարգում (Username):</label>
+            <input type="text" id="id_username" name="username" value="{{ user.username }}" required>
+            {% if form.username.errors %}
+                <div class="error-message">
+                    {% for error in form.username.errors %}
+                        {% if error == "A user with that username already exists." %}
+                            <div class="error-message">*Տվյալ անունով օգտատեր գոյություն ունի։</div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+        <p>Գաղտնաբառերը պահվում են հեշավորված, ուստի ձեր գաղտնաբառը տեսնելու հնարավորություն չկա, բայց կարող եք փոխել գաղտնաբառը՝ օգտագործելով հետևյալ <a href="{% url 'user-password' %}">հղումը</a></p>
+        
+        <input type="submit" value="Փոփոխել">
+    </form>
+    {% endif %}
+</div>
+</body>
+</html>
+{% endlanguage %}
+{% endblock %}
